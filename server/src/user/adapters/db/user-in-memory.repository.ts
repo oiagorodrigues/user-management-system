@@ -26,13 +26,7 @@ export class UserInMemory implements UserRepository {
 
   update(userId: string, user: User): User {
     const userIndex = this.users.findIndex((user) => user.id === userId);
-
-    this.users.push(
-      ...this.users.slice(0, userIndex),
-      user,
-      ...this.users.slice(userIndex + 1),
-    );
-
+    this.users.splice(userIndex, 1, user);
     return user;
   }
 }

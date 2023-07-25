@@ -36,9 +36,7 @@ export class UserController {
   }
 
   @Put(':id')
-  update(@Param('id') id: string, @Body() userCommand: UserCommand): User {
-    const { name, email, phone, image } = userCommand;
-    const user = new User(name, email, phone, image);
+  update(@Param('id') id: string, @Body() user: User): User {
     return this.userService.update(id, user);
   }
 

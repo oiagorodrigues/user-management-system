@@ -20,7 +20,6 @@ export class UserService {
   }
 
   findOne(userId: string) {
-    console.log({ userId });
     return this.userRepository.findOne(userId);
   }
 
