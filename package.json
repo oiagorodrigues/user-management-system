@@ -1,13 +1,19 @@
 {
   "name": "user-management",
   "version": "1.0.0",
-  "description": "Monorepo of a User Management application to study Next.js and Nest.js using Hexagonal Architecture.",
+  "description": "",
+  "main": "index.js",
   "scripts": {
-    "start": "npm run start:dev --workspaces --if-present"
+    "start:server": "cd server && npm run start:dev",
+    "start:client": "cd client && npm run dev",
+    "start": "concurrently \"npm run start:server\" \"npm run start:client\""
   },
   "keywords": [],
-  "author": "Iago Rodrigues <yagomello16@gmail.com>",
+  "author": "",
   "license": "ISC",
+  "dependencies": {
+    "concurrently": "^8.2.0"
+  },
   "workspaces": [
     "server"
   ]

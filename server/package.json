@@ -1,8 +1,8 @@
 {
   "name": "user-management-server",
   "version": "0.0.1",
-  "description": "",
-  "author": "",
+  "description": "User Management module built using Nest.js",
+  "author": "Iago Rodrigues <yagomello16@gmail.com>",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
@@ -67,5 +67,9 @@
     ],
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
+  },
+  "main": ".eslintrc.js",
+  "directories": {
+    "test": "test"
   }
 }
