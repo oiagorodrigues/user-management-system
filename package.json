@@ -1,7 +1,7 @@
 {
   "name": "user-management",
   "version": "1.0.0",
-  "description": "",
+  "description": "User Management system built with Nest.js and Next.js",
   "main": "index.js",
   "scripts": {
     "start:server": "cd server && npm run start:dev",
@@ -9,12 +9,13 @@
     "start": "concurrently \"npm run start:server\" \"npm run start:client\""
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "Iago Rodrigues <yagomello16@gmail.com>",
+  "license": "UNLICENSED",
   "dependencies": {
     "concurrently": "^8.2.0"
   },
   "workspaces": [
-    "server"
+    "server",
+    "client"
   ]
 }

@@ -1,6 +1,7 @@
 {
-  "name": "client",
+  "name": "user-management-client",
   "version": "0.1.0",
+  "description": "User Management module built using Next.js",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -21,5 +22,9 @@
     "react-dom": "18.2.0",
     "tailwindcss": "3.3.3",
     "typescript": "5.1.6"
-  }
+  },
+  "main": "next.config.js",
+  "devDependencies": {},
+  "author": "Iago Rodrigues <yagomello16@gmail.com>",
+  "license": "UNLICENSED"
 }
