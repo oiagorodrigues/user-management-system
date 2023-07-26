@@ -11,6 +11,7 @@ import { setUsers } from '~/store/features/users-slice'
 import { User } from '~/types/user'
 import { deleteUser, fetchUsers } from './requests'
 import { headers } from './constants'
+import Link from 'next/link'
 
 const HomeTable = () => {
   const users = useSelector((state: AppState) => state.users.users)
@@ -47,13 +48,13 @@ const HomeTable = () => {
                 if (header.field === 'action') {
                   return (
                     <Table.Cell key={`row_${rowIndex}_col_${colIndex}`}>
-                      <button
-                        className='text-sky-400 border border-sky-400 hover:bg-sky-500 hover:text-white rounded-lg text-sm p-2.5 text-center mr-2'
-                        type='button'
+                      <Link
+                        className='text-sky-400 border border-sky-400 hover:bg-sky-500 hover:text-white rounded-lg text-sm p-2.5 text-center mr-2 inline-flex'
+                        href={`/users/${row.id}`}
                       >
                         <FaPencil />
                         <span className='sr-only'>Edit user</span>
-                      </button>
+                      </Link>
                       <button
                         className='text-red-400 border border-red-400 hover:bg-red-500 hover:text-white rounded-lg text-sm p-2.5 text-center'
                         type='button'

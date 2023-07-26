@@ -6,28 +6,36 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { Form } from '~/components/ui/Form'
 import { User } from '~/types/user'
 import { UserValidationSchema } from './validations'
-import { useAppDispatch } from '~/store'
-import { setUsers } from '~/store/features/users-slice'
-import { useRouter } from 'next/navigation'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { postUsers } from './requests'
+import { useParams, useRouter } from 'next/navigation'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { getUser, postUsers, updateUser } from './requests'
+import { useEffect } from 'react'
 
 const UsersForm = () => {
   const queryClient = useQueryClient()
   const router = useRouter()
+  const params = useParams()
 
-  const createUserMutation = useMutation({
-    mutationFn: (user: User) => postUsers(user),
+  const userMutation = useMutation({
+    mutationFn: (user: User) =>
+      params.id ? updateUser(user) : postUsers(user),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['fetchUsers'] })
       router.push('/')
     },
   })
 
+  const fetchUserQuery = useQuery({
+    queryKey: ['user', params.id],
+    queryFn: () => getUser(params.id as string),
+    enabled: false,
+  })
+
   const {
     control,
     handleSubmit,
-    formState: { isValid: isFormValid },
+    formState: { isValid: isFormValid, isDirty: isFormDirty },
+    reset,
   } = useForm<User>({
     defaultValues: {
       name: '',
@@ -36,12 +44,22 @@ const UsersForm = () => {
       image: '',
     },
     resolver: yupResolver(UserValidationSchema),
-    mode: 'onSubmit',
+    mode: 'onChange',
     shouldFocusError: true,
   })
 
+  useEffect(() => {
+    if (!params.id) return
+    queryClient.fetchQuery(['user', params.id])
+  }, [params.id, queryClient])
+
+  useEffect(() => {
+    if (!fetchUserQuery.data) return
+    reset(fetchUserQuery.data)
+  }, [fetchUserQuery.data, reset])
+
   function submitHandler(user: User) {
-    createUserMutation.mutate(user)
+    userMutation.mutate(user)
   }
 
   return (
@@ -118,7 +136,7 @@ const UsersForm = () => {
         </button>
         <button
           className='border border:bg-green-800 text-white font-medium bg-green-600 hover:bg-green-700 rounded-lg text-sm py-2 px-5 text-center shadow-sm disabled:bg-gray-200 disabled:border:bg-gray-200 disabled:text-gray-600 disabled:hover:bg-gray-200'
-          disabled={!isFormValid}
+          disabled={params.id ? !isFormDirty || !isFormValid : !isFormValid}
         >
           Submit
         </button>
