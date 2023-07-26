@@ -3,6 +3,8 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { FaPencil, FaTrashCan } from 'react-icons/fa6'
 import { useSelector } from 'react-redux'
+import { useEffect } from 'react'
+import Link from 'next/link'
 
 import { Avatar } from '~/components/ui/Avatar'
 import { Table } from '~/components/ui/Table'
@@ -11,20 +13,21 @@ import { setUsers } from '~/store/features/users-slice'
 import { User } from '~/types/user'
 import { deleteUser, fetchUsers } from './requests'
 import { headers } from './constants'
-import Link from 'next/link'
 
 const HomeTable = () => {
   const users = useSelector((state: AppState) => state.users.users)
   const dispatch = useAppDispatch()
   const queryClient = useQueryClient()
 
-  useQuery({
+  const fetchUsersQuery = useQuery({
     queryKey: ['fetchUsers'],
     queryFn: fetchUsers,
-    onSuccess: (users: User[]) => {
-      dispatch(setUsers(users))
-    },
   })
+
+  useEffect(() => {
+    if (!fetchUsersQuery.data) return
+    dispatch(setUsers(fetchUsersQuery.data))
+  }, [fetchUsersQuery.data, dispatch])
 
   const deleteUserMutation = useMutation({
     mutationFn: (user: User) => deleteUser(user),
