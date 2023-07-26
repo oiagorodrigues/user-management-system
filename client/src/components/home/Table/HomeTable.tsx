@@ -1,54 +1,28 @@
 'use client'
 
-import { useCallback, useEffect } from 'react'
+import { useQuery } from '@tanstack/react-query'
 import { FaPencil, FaTrashCan } from 'react-icons/fa6'
 import { useSelector } from 'react-redux'
+
 import { Avatar } from '~/components/ui/Avatar'
-import { Table, TableHeader } from '~/components/ui/Table'
+import { Table } from '~/components/ui/Table'
 import { AppState, useAppDispatch } from '~/store'
 import { setUsers } from '~/store/features/users-slice'
 import { User } from '~/types/user'
-
-const headers: TableHeader[] = [
-  {
-    field: 'image',
-    label: '',
-  },
-  {
-    field: 'name',
-    label: 'Name',
-  },
-  {
-    field: 'email',
-    label: 'E-mail',
-  },
-  {
-    field: 'phone',
-    label: 'Phone',
-  },
-  {
-    field: 'action',
-    label: 'Actions',
-  },
-]
+import { fetchUsers } from './requests'
+import { headers } from './constants'
 
 const HomeTable = () => {
   const users = useSelector((state: AppState) => state.users.users)
   const dispatch = useAppDispatch()
 
-  const fetchUsers = useCallback(async () => {
-    try {
-      const res = await fetch('http://localhost:3333/users')
-      const data: User[] = await res.json()
-      dispatch(setUsers(data))
-    } catch (error) {
-      console.error(error)
-    }
-  }, [dispatch])
-
-  useEffect(() => {
-    fetchUsers()
-  }, [fetchUsers])
+  useQuery({
+    queryKey: ['fetchUsers'],
+    queryFn: fetchUsers,
+    onSuccess: (users: User[]) => {
+      dispatch(setUsers(users))
+    },
+  })
 
   return (
     <Table.Root>
