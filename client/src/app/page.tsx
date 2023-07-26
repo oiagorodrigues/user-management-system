@@ -1,15 +1,25 @@
+import Link from 'next/link'
+import { FaPlus } from 'react-icons/fa6'
 import { HomeTable } from '~/components/home/Table'
 
 export default function Home() {
   return (
-    <main className='min-h-screen p-24'>
-      <section>
-        <h1 className='text-2xl font-bold text-gray-800 mb-4'>Users</h1>
+    <section>
+      <div className='flex items-center justify-between mb-2'>
+        <h1 className='text-2xl font-bold text-gray-800'>Users</h1>
 
-        <HomeTable />
+        <Link
+          className='text-white border border:bg-green-800 bg-green-700 hover:bg-green-800 font-medium rounded-lg text-sm px-4 py-2 text-center inline-flex items-center justify-center gap-1'
+          href='/users/create'
+        >
+          <FaPlus />
+          Add user
+        </Link>
+      </div>
 
-        {/* TODO: add pagination */}
-      </section>
-    </main>
+      <HomeTable />
+
+      {/* TODO: add pagination */}
+    </section>
   )
 }
