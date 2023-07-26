@@ -9,3 +9,17 @@ export const fetchUsers = async () => {
     console.error(error)
   }
 }
+
+export const deleteUser = async (user: User) => {
+  try {
+    const res = await fetch(`http://localhost:3333/users/${user.id}`, {
+      method: 'DELETE',
+      body: JSON.stringify(user),
+      headers: { 'Content-Type': 'application/json' },
+    })
+    const isDeleted: boolean = await res.json()
+    return isDeleted
+  } catch (error) {
+    console.error(error)
+  }
+}

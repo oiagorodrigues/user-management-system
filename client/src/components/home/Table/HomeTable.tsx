@@ -1,6 +1,6 @@
 'use client'
 
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { FaPencil, FaTrashCan } from 'react-icons/fa6'
 import { useSelector } from 'react-redux'
 
@@ -9,18 +9,26 @@ import { Table } from '~/components/ui/Table'
 import { AppState, useAppDispatch } from '~/store'
 import { setUsers } from '~/store/features/users-slice'
 import { User } from '~/types/user'
-import { fetchUsers } from './requests'
+import { deleteUser, fetchUsers } from './requests'
 import { headers } from './constants'
 
 const HomeTable = () => {
   const users = useSelector((state: AppState) => state.users.users)
   const dispatch = useAppDispatch()
+  const queryClient = useQueryClient()
 
   useQuery({
     queryKey: ['fetchUsers'],
     queryFn: fetchUsers,
     onSuccess: (users: User[]) => {
       dispatch(setUsers(users))
+    },
+  })
+
+  const deleteUserMutation = useMutation({
+    mutationFn: (user: User) => deleteUser(user),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['fetchUsers'] })
     },
   })
 
@@ -49,6 +57,7 @@ const HomeTable = () => {
                       <button
                         className='text-red-400 border border-red-400 hover:bg-red-500 hover:text-white rounded-lg text-sm p-2.5 text-center'
                         type='button'
+                        onClick={() => deleteUserMutation.mutate(row)}
                       >
                         <FaTrashCan />
                         <span className='sr-only'>Delete user</span>
